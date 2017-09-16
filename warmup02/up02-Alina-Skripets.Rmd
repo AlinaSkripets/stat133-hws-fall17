@@ -1,0 +1,175 @@
+---
+title: "WarmUp2"
+author: "Alina Scripts"
+date: "September 11, 2017"
+output: github_document
+---
+
+Lets download a file to my computer's working directory first and upload it to R working space.
+
+```{r}
+rm(list=ls())
+github <- 'https://github.com/ucb-stat133/stat133-hws-fall17/'
+repo <- 'raw/master/warmup02/data/nba2017-salary-points.RData'
+
+download.file(url = paste0(github, repo), 
+destfile = "nba2017-salary-points.RData")
+
+```
+
+```{r}
+rm(list=ls())
+load("nba2017-salary-points.RData")
+```
+
+Now we list all the variables that we have in the data package. We notice that because I am not very good at R, I have two extra objects: github and repo.Or not, I fixed it using rm function.
+
+```{r}
+# list the available objects
+ls()
+```
+
+Now we hapazardly try to find out that type of salary is ' `r typeof (salary) ` ', whether or not team is a vector - `r is.vector(team) `, whether or not position object is a list -  `r is.list(position) ` and what is the class of player object, which is' `r class(player) ` '    
+
+We successfully used indented code! But I still do't understand what the professor meant by finding out *flavor*.
+
+Now we check that all the objects are the same length:
+
+```{r}
+
+length(salary)
+length(team)
+length(position)
+length(player)
+length(points)
+length(experience)
+length(points1)
+length(points2)
+length(points3)
+```
+They are the same length!
+On to the next part.
+
+
+# Quantitative variable: *Salary* 
+
+```{r}
+summary(salary)
+```
+```{r}
+mean(salary)
+sd(salary)
+min(salary)
+max(salary)
+median(salary)
+quantile(salary, probs = seq (0, 1, 0.25))
+```
+
+I can find all the statistics above, no problem. But how do i find typical value/ mode? I have no idea.
+
+```{r}
+?tabulate
+getmode <- function(salary) {
+  uniqv <- unique(salary)
+  uniqv[which.max(tabulate(match(salary,uniqv)))]
+}
+getmode(salary)
+```
+Wait, I did it!
+Now I can also find a spread by substracting min from max.
+
+```{r}
+spread= max(salary)-min(salary)
+spread
+```
+Oooo, what do we have here. 
+
+```{r}
+hist(salary)
+boxplot(salary)
+```
+/
+
+/**What is the overall shape?** This histogram is scewed to the right with th bulk of salaries in the first bin. 
+
+**What is the typical center?** Typical center is at the left.
+
+**Overall range, along with an interval of typical measurements.** Graphs have a huge range and typical interval is small because we have lots of data.
+
+**Try to explain why your observations are important or interesting.** Observation is interesting because it proves that while the mean of the distribution is pretty high, it doesn't mean that players earn a lot on average. Median here is a better description of data.
+
+#How do I creat a density polygon? No idea :(
+
+
+```{r}
+??density
+y <- c(density(salary))
+
+#cdplot(salary)
+```
+
+# Catigorical variable: *Team*
+
+Is team variable a factor? `r is.factor(team) `
+Lets also find out how many variable are in each category aka frequency of each team.
+
+```{r}
+teamfreq <- table(team)
+teamfreq
+```
+
+Based on this, we can calculate proportions or relative frequencies of each team. 
+
+```{r}
+prop.table(teamfreq)
+```
+
+```{r}
+barplot(prop.table(teamfreq))
+```
+/
+
+**What is the overall shape?** Pretty much flat.
+
+**What is the typical center?** Each team is approximately the same size.
+
+**Overall range, along with an interval of typical measurements.** 14 or 15 players in eah team.
+
+**Try to explain why your observations are important or interesting.** Clearly, game rules and team size regulations dictated the shape of the barplot.
+
+
+
+# Reflections
+
+Question|Answer
+-------------------------------------------------------------|-------------------------------------------------------------
+What things were hard, even though you saw them in class? | Finding a mode.
+What was easy(-ish) even though we haven't done it in class? | It was easy to figure out indented code.
+What type of "errors" you struggled with (if any)? | I still can't figure out density polygon.
+What are the parts you are not fully understanding? | Falvor of an object and density polygon creation. Creating my own function for mode was hard too.
+What was the most time consuming part? | Comments.
+Did you collaborate with other students? If so, with who? In what manner? | No, Piazza was unresponsive. 
+Was there any frustrating issue? (e.g. RStudio cryptic error, one or more package not playing nice) | Could get the ls() function to not list github and repo as separate elements.
+
+
+
+##For people who want to take things further. 
+
+How to use the R package "xtable" to produce nicely formatted tables.
+```{r}
+#install.packages("xtable")
+
+```
+```{r}
+library("xtable")
+```
+
+
+
+
+```{r}
+?par
+plot(points,salary,type="l", col= "light blue",lwd = 5)
+```
+
+
