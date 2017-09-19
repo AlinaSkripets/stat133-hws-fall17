@@ -2,9 +2,8 @@
 
 The purpose of this HW is to summarize variables (quantatitative and categorical) graphically and numerically.
 
-Modify the content of this file.
 
-- Special instructions for any user (if necessary)
-- Special instructions for graders (if necessary)
-- Links to any resources that you used to complete the HW
-- List of references that you used to complete the HW
+- No special instructions
+- No special instructions (Be nice?)
+- https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf
+- Lecture slides and previous labs
