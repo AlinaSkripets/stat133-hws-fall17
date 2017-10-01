@@ -1,0 +1,386 @@
+---
+title: "hw02-Alina-Skripets"
+author: "Alina Skripets"
+date: "October 1, 2017"
+output: github_document
+---
+
+About the Research Question
+In the previous assignment you started to tackle the initial research question: “the more
+points a player scores, the higher his salary?”
+Admittedly, this question is kind of open ended. From a narrow point of view, and based
+on the correlation between points and salary, we could answer the research question like so:
+“Yes, in general, the more points scored by a player, the higher his salary”. We can even take
+one more step and use the results of the simple linear regression to state that “on average,
+for every extra point that a player scores, his salary will tend to increase by 8556.68 dollars”.
+However, the salary of a player will hardly depend on only the number of scored points.
+Other factors like years of experience, offensive performance, defensive performance, and
+physical attributes, for instance, may contribute as well to his salary.
+In this assignment, you are going to expand the scope of the analysis by taking into account
+the overall performance of a player. More precisely, the idea is to look at common individual
+statistics (e.g. points, rebounds, assists, steals, etc.) to try to capture ther performance of a
+player, and see how this may be related with his salary.
+
+# Data
+
+The data set for this assignment is in the file nba2017-player-statistics.csv, inside the
+data/ folder of the course github repo stat133-fall-2017.
+
+# Download the data
+You will need to download a copy of the data file to your local repository. One way to do
+this from R is with the download.file() function. By the way, you should NOT include a
+code chunk with the previous command in your Rmd file.
+
+```{r}
+# download csv file to your working directory
+# (do NOT include this code in your Rmd)
+rm(list = ls())
+github <- "https://github.com/ucb-stat133/stat133-fall-2017/raw/master/"
+file <- "data/nba2017-player-statistics.csv"
+csv <- paste0(github, file)
+#download.file(url = csv, destfile = 'nba2017-player-statistics.csv')
+```
+
+```{r}
+
+#install.packages("readr")
+library(readr)
+library(ggplot2)
+library(dplyr)
+```
+
+# 2) Import the data in R
+
+We want you to get some practice importing data tables in R. As we saw in lecture, there
+are multiple ways for reading in tables in R. One major approach consists of using R base
+functions: read.table() and friends—e.g. read.csv(), read.delim(). Another major
+approach, recently introduced, is the one provided by the family of functions in the package
+"readr".
+
+You will have to import the data using both approaches. This means that you are going to
+import the data twice, but this is just for practicing purposes, and so that you can compare
+both importing styles ("base" vs "readr").
+
+What you should include in your Rmd is two code chunks with the commands to import
+the data, one chunk with read.csv(), and the other with read_csv(). 
+```{r}
+dat1 <- read.csv(csv)
+dat2 <- read_csv('nba2017-player-statistics.csv')
+```
+Create one data frame for the output of read.csv(), and use str() to display its structure. Likewise, create
+another data frame for the output of read_csv() and use str() to check its structure.
+```{r}
+str(dat1)
+```
+In both cases you have to explicitly specify the data-type for each column as follows:
+
+• the columns Player, Team, and Experience have to be declared as type character.
+• the column Position has to be declared as a factor with levels 'C', 'PF', 'PG',
+'SF', 'SG'.
+• the column Salary has to be declared as type double (or real).
+• the rest of the 19 columns have to be declared as type integer.
+
+```{r}
+
+colClasses <- c(
+    'character',
+    'character',
+    'factor',
+    'character',
+    'real',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer'
+)
+dat1 <- read.csv(csv,colClasses = colClasses)
+str(dat1)
+```
+
+
+
+```{r}
+str(dat2)
+col <- c(
+    'character',
+    'character',
+    'factor',
+    'character',
+    'real',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer',
+    'integer'
+)
+```
+
+```{r}
+dat2 <- read_csv('nba2017-player-statistics.csv', col_types = list(
+     Team = col_factor(c('GSW', 'LAL', 'SAS', 'HOU', 'LAC', 'UTA', 'OKC', 'MEM', 'POR', 'DEN', 'NOP', 'DAL', 'SAC', 'MIN', 'PHO', 'BRK', 'PHI', 'ORL', 'NYK', 'CHO', 'DET', 'MIA', 'IND', 'CHI', 'MIL', 'ATL', 'WAS', 'TOR', 'CLE', 'BOS')),
+     Salary = col_double()
+))
+str(dat2)
+```
+
+• recall that read.csv() uses the argument colClasses to specify data types.
+• recall that read_csv() uses the argument col_types to specify data types.
+In case you need, here’s a couple of resources for importing data (if you google about this
+topic you’ll find more links):
+• https://www.r-bloggers.com/using-colclasses-to-load-data-more-quickly-in-r/
+• https://cran.r-project.org/web/packages/readr/vignettes/readr.html
+
+# 3) Right after importing the data
+Once you have the data in R, do a bit of preprocessing on the column Experience. This
+column should be of type character because of the presence of the R values that indicate
+rookie players.
+Replace all the occurrences of "R" with 0, and then convert the entire column into integers.
+```{r}
+typeof(dat1$Experience)
+dat1$Experience[dat1$Experience == "R"] <- "0"
+dat1$Experience <- as.integer(dat1$Experience)
+typeof(dat1$Experience)
+```
+
+# 4) Performance of players
+As we mention above, in this assignment you will take into account other variables rather than
+just the points scored by each player. More precisely, you are going to consider basic individual statistics commonly used in the NBA in order to get a proxy of a player’s performance.
+Performance of NBA players can be measured in various ways. Perhaps the most popular
+performance measure is known as the “Efficiency” statistic, simply referred to as EFF
+https://en.wikipedia.org/wiki/Efficiency_(basketball)
+EFF computes performance as an index that takes into account basic individual statistics:
+points, rebounds, assists, steals, blocks, turnovers, and shot attempts (per game). It is derived
+by a simple formula:
+EFF = (PTS + REB + AST + STL + BLK - Missed FG - Missed FT - TO) / GP
+
+EFF: efficiency
+• PTS: total points
+• REB: total rebounds
+• AST: assists
+• STL: steals
+• BLK: blocks
+• Missed FG: missed field goals
+• Missed FT: missed free throws
+• TO: turnovers
+• GP: games played
+
+
+In case you are curious, you can find more information about the player statistics and related
+acronyms in the following wikipedia entry:
+https://en.wikipedia.org/wiki/Basketball_statistics
+
+To compute EFF, you will have to add the following variables to your data frame:
+• Missed_FG (missed field goals) +
+• Missed_FT (missed free throws) +
+• PTS (total points)
+• REB (total rebounds: offensive and defensive)
+• MPG (minutes per game; NOT to be used when calculating EFF)
+
+
+```{r}
+dat1$Missed_FG <- dat1$FGA-dat1$FGM
+dat1$Missed_FT <- dat1$FTA-dat1$FTM
+dat1$PTS <-dat1$Points2*2+dat1$Points3*3+dat1$FTM*1
+dat1$REB <- dat1$OREB+dat1$DREB
+dat1$MPG <- dat1$MIN/dat1$GP
+select(dat1, Player, Missed_FG, Missed_FT, PTS, REB, MPG, TO)
+```
+
+
+Once you have all the necessary statistics, add a variable EFF to the data frame using the
+formula provided above.
+EFF = (PTS + REB + AST + STL + BLK - Missed FG - Missed FT - TO) / GP
+
+```{r}
+dat1$EFF = (dat1$PTS + dat1$REB + dat1$AST + dat1$STL + dat1$BLK - dat1$Missed_FG - dat1$Missed_FT - dat1$TO) / dat1$GP
+summary(dat1$EFF)
+hist(dat1$EFF, col = 'grey')
+```
+Compute summary statistics for EFF and confirm that you have the following results, as well
+as a similar histogram:
+Min. 1st Qu. Median Mean 3rd Qu. Max.
+-0.600 5.452 9.090 10.140 13.250 33.840
+
+
+• Display the player name, team, salary, and EFF value of the top-10 players by EFF in
+decreasing order (display this information in a data frame).
+```{r}
+top <- select(slice(arrange(dat1, desc(EFF)), 1:10), Player, Team, Salary, EFF)
+is.data.frame(top)
+top
+```
+
+• Provide the names of the players that have a negative EFF.
+```{r}
+dat1$Player[which(dat1$EFF < 0)]
+select(filter(dat1, dat1$EFF < 0), Player)
+```
+
+• Use the function cor() to compute the correlation coefficients between EFF and all the
+variables used in the EFF formula.
+```{r}
+?cor
+cor(dat1$EFF, dat1$PTS)
+cor(dat1$EFF, dat1$REB)
+cor(dat1$EFF, dat1$AST) 
+cor(dat1$EFF, dat1$STL)
+cor(dat1$EFF, dat1$BLK)
+cor(dat1$EFF, dat1$Missed_FG)
+cor(dat1$EFF, dat1$Missed_FT)
+cor(dat1$EFF, dat1$TO)
+cor(dat1$EFF, dat1$GP)
+```
+• Notice that Missed_FG, Missed_FT, and TO contribute negatively to EFF, so make
+sure to take into account this negative association when calculating the correlation
+coefficients.
+```{r}
+cor(dat1$EFF, dat1$Missed_FG)*(-1)
+cor(dat1$EFF, dat1$Missed_FT) *(-1)
+cor(dat1$EFF, dat1$TO)*(-1)
+```
+
+• Display the computed correlations in descending order, either in a vector or a data
+frame. And create a barchart with the correlations (bars in decreasing order) like the
+one below.
+
+```{r}
+c <- c(
+  cor(dat1$EFF, dat1$PTS),
+ cor(dat1$EFF, dat1$REB),
+cor(dat1$EFF, dat1$AST),
+cor(dat1$EFF, dat1$STL),
+cor(dat1$EFF, dat1$BLK),
+cor(dat1$EFF, dat1$Missed_FG)*(-1),
+cor(dat1$EFF, dat1$Missed_FT)*(-1),
+cor(dat1$EFF, dat1$TO)*(-1),
+cor(dat1$EFF, dat1$GP)
+)
+answer <- sort(c, decreasing = TRUE)
+barplot(answer)
+```
+
+
+
+# 5) Efficiency and Salary
+
+Once you’ve calculated the Efficiency statistic, produce a scatterplot between Efficiency
+(x-axis) and Salary (y-axis), including a lowess smooth line (locally weighted scatterplot
+smoothing). 
+```{r}
+ggplot(dat1, aes(x = EFF, y = Salary)) +
+  geom_point() + 
+  geom_smooth(method = loess)
+```
+
+Also, compute the linear correlation coefficient between them.
+```{r}
+cor(dat1$EFF, dat1$Salary)
+```
+What can you say about the relationship between these two variables?
+*It is fairly positive*
+
+One aspect that has an important contribution in a player’s salary has to do with the years
+of experience playing in the NBA. In fact, salaries of rookie players follow a special scale, as
+explained by Tom Ziller in this post.
+Why NBA players get paid so much more than NFL stars
+Because rookie players (and other low-experience players) seem to form a different universe
+of players, let’s see what’s happening with those individuals with a more “solid” or more
+established trajectory in the NBA.
+• Taking into account the column MPG (minutes per game) select those players that have
+an MPG value of 20 or more minutes per game.
+```{r}
+players2 <- filter(dat1, MPG >=20)
+players2
+```
+• Create a data frame players2 with these players.
+• Use this data frame to create a scatterplot between Efficiency and Salary, including a
+lowess smooth line.
+```{r}
+ggplot(players2, aes(x = EFF, y = Salary)) + 
+  geom_point() + 
+  geom_smooth(method = loess)
+```
+• Compute the linear correlation coefficient between these variables.
+```{r}
+cor(players2$EFF, players2$Salary)
+```
+• What can you say about the relationship between these two variables for the set of
+“more established players”?
+*It is lower for more experienced payers than for less experiienced maybe because more important factors come into playor maybe salaries cannot go much higher.* 
+
+In future assignments, we’ll consider other research questions, as well as other ways to explore
+more variables, and perform a deeper multivariate analysis.
+
+
+# 6) Comments and Reflections
+Reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc.
+
+Question | Answer
+-------------------------------------------------------------------------- | ----------------------------------------------
+• What things were hard, even though you saw them in class/lab? | Still struggling with creating vectors.
+• What was easy(-ish) even though we haven’t done it in class/lab? | Adding columns
+• Did you need help to complete the assignment? If so, what kind of help? | No, just piazza
+• How much time did it take to complete this HW? | More than 7 hours!
+• What was the most time consuming part? | Figuring out all the basketball terms
+• Was there anything that you did not understand? or fully grasped? | Need to see the answers and check correctness first.
+• Was there anything frustrating in particular? | Basketball!
+• Was there anything exciting? Something that you feel proud of? (Don’t be shy, we won’t tell anyone). | No. But I like ggplot.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
