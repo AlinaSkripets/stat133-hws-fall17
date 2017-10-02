@@ -63,15 +63,10 @@ both importing styles ("base" vs "readr").
 
 What you should include in your Rmd is two code chunks with the commands to import
 the data, one chunk with read.csv(), and the other with read_csv(). 
-```{r}
-dat1 <- read.csv(csv)
-dat2 <- read_csv('nba2017-player-statistics.csv')
-```
+
 Create one data frame for the output of read.csv(), and use str() to display its structure. Likewise, create
 another data frame for the output of read_csv() and use str() to check its structure.
-```{r}
-str(dat1)
-```
+
 In both cases you have to explicitly specify the data-type for each column as follows:
 
 • the columns Player, Team, and Experience have to be declared as type character.
@@ -108,45 +103,21 @@ colClasses <- c(
     'integer',
     'integer'
 )
-dat1 <- read.csv(csv,colClasses = colClasses)
+dat1 <- read.csv(csv,colClasses = colClasses, stringsAsFactors = FALSE, na.strings = "N/A")
 str(dat1)
+dat1
 ```
 
 
 
 ```{r}
+dat2 <- read_csv('nba2017-player-statistics.csv')
 str(dat2)
-col <- c(
-    'character',
-    'character',
-    'factor',
-    'character',
-    'real',
-    'integer',
-    'integer',
-    'integer',
-    'integer',
-    'integer',
-    'integer',
-    'integer',
-    'integer',
-    'integer',
-    'integer',
-    'integer',
-    'integer',
-    'integer',
-    'integer',
-    'integer',
-    'integer',
-    'integer',
-    'integer',
-    'integer'
-)
 ```
 
 ```{r}
 dat2 <- read_csv('nba2017-player-statistics.csv', col_types = list(
-     Team = col_factor(c('GSW', 'LAL', 'SAS', 'HOU', 'LAC', 'UTA', 'OKC', 'MEM', 'POR', 'DEN', 'NOP', 'DAL', 'SAC', 'MIN', 'PHO', 'BRK', 'PHI', 'ORL', 'NYK', 'CHO', 'DET', 'MIA', 'IND', 'CHI', 'MIL', 'ATL', 'WAS', 'TOR', 'CLE', 'BOS')),
+     Position = col_factor(c('C', 'PF', 'PG', 'SF', 'SG')),
      Salary = col_double()
 ))
 str(dat2)
@@ -223,7 +194,7 @@ EFF = (PTS + REB + AST + STL + BLK - Missed FG - Missed FT - TO) / GP
 ```{r}
 dat1$EFF = (dat1$PTS + dat1$REB + dat1$AST + dat1$STL + dat1$BLK - dat1$Missed_FG - dat1$Missed_FT - dat1$TO) / dat1$GP
 summary(dat1$EFF)
-hist(dat1$EFF, col = 'grey')
+hist(dat1$EFF, col = 'grey', main = "EFF", xlab = "EFF", ylim = c(0, 200), xlim = c(-10, 40))
 ```
 Compute summary statistics for EFF and confirm that you have the following results, as well
 as a similar histogram:
@@ -248,7 +219,6 @@ select(filter(dat1, dat1$EFF < 0), Player)
 • Use the function cor() to compute the correlation coefficients between EFF and all the
 variables used in the EFF formula.
 ```{r}
-?cor
 cor(dat1$EFF, dat1$PTS)
 cor(dat1$EFF, dat1$REB)
 cor(dat1$EFF, dat1$AST) 
@@ -257,7 +227,6 @@ cor(dat1$EFF, dat1$BLK)
 cor(dat1$EFF, dat1$Missed_FG)
 cor(dat1$EFF, dat1$Missed_FT)
 cor(dat1$EFF, dat1$TO)
-cor(dat1$EFF, dat1$GP)
 ```
 • Notice that Missed_FG, Missed_FT, and TO contribute negatively to EFF, so make
 sure to take into account this negative association when calculating the correlation
@@ -273,7 +242,8 @@ frame. And create a barchart with the correlations (bars in decreasing order) li
 one below.
 
 ```{r}
-c <- c(
+Name <- c("PTS", "REB", "AST", "STL", "BLK", "FG", "FT", "TO")
+Corr <- c(
   cor(dat1$EFF, dat1$PTS),
  cor(dat1$EFF, dat1$REB),
 cor(dat1$EFF, dat1$AST),
@@ -281,11 +251,18 @@ cor(dat1$EFF, dat1$STL),
 cor(dat1$EFF, dat1$BLK),
 cor(dat1$EFF, dat1$Missed_FG)*(-1),
 cor(dat1$EFF, dat1$Missed_FT)*(-1),
-cor(dat1$EFF, dat1$TO)*(-1),
-cor(dat1$EFF, dat1$GP)
+cor(dat1$EFF, dat1$TO)*(-1)
 )
-answer <- sort(c, decreasing = TRUE)
-barplot(answer)
+CORR <- data_frame(Name,Corr)
+CORR
+answer <- arrange(CORR, desc(CORR$Corr))
+answer
+?barplot
+barplot(answer$Corr, names.arg = answer$Name, 
+        main = "Correlation between Player Stat and EFF",
+        width = 2, ylim = c(-1, 1), 
+        col = ifelse(answer$Corr > 0, "grey", "lightgreen"))
+abline(h=0)
 ```
 
 
@@ -306,7 +283,7 @@ Also, compute the linear correlation coefficient between them.
 cor(dat1$EFF, dat1$Salary)
 ```
 What can you say about the relationship between these two variables?
-*It is fairly positive*
+*It is fairly positive. As EFF increases, salary increases as well.*
 
 One aspect that has an important contribution in a player’s salary has to do with the years
 of experience playing in the NBA. In fact, salaries of rookie players follow a special scale, as
@@ -319,9 +296,12 @@ established trajectory in the NBA.
 an MPG value of 20 or more minutes per game.
 ```{r}
 players2 <- filter(dat1, MPG >=20)
-players2
+select(players2, Player)
 ```
 • Create a data frame players2 with these players.
+```{r}
+players2
+```
 • Use this data frame to create a scatterplot between Efficiency and Salary, including a
 lowess smooth line.
 ```{r}
@@ -335,7 +315,7 @@ cor(players2$EFF, players2$Salary)
 ```
 • What can you say about the relationship between these two variables for the set of
 “more established players”?
-*It is lower for more experienced payers than for less experiienced maybe because more important factors come into playor maybe salaries cannot go much higher.* 
+*It is lower for more experienced players than for less experiienced maybe because more important factors come into play or maybe salaries cannot go much higher.* 
 
 In future assignments, we’ll consider other research questions, as well as other ways to explore
 more variables, and perform a deeper multivariate analysis.
@@ -354,20 +334,6 @@ Question | Answer
 • Was there anything that you did not understand? or fully grasped? | Need to see the answers and check correctness first.
 • Was there anything frustrating in particular? | Basketball!
 • Was there anything exciting? Something that you feel proud of? (Don’t be shy, we won’t tell anyone). | No. But I like ggplot.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

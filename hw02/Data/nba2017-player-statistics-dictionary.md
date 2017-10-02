@@ -36,7 +36,7 @@ What are the units of measurement (e.g. inches, pounds, km/h, etc)?
 How missing values are codified?
 ================================
 
-No missing values
+No missing values (Codified as N/A)
 
 Data Sourse: www.basketball-reference.com
 =========================================
