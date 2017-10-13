@@ -1,0 +1,104 @@
+---
+title: "nba2017-player-stats-dictionary"
+author: "Alina Skripets"
+date: "October 10, 2017"
+output: github_document
+---
+# NBA player statistics
+
+## What is the data about?
+It is statistics on the NBA players.
+
+## How many rows?
+441
+## How many columns?
+27
+## What are the column labels?
+
+"player","games_played","minutes","field_goals_made","field_goals_atts","field_goals_perc","points3_made","points3_atts","points3_perc","points2_made","points2_atts","points2_perc","points1_made","points1_atts","points1_perc","off_rebounds","def_rebounds","assists","steals","blocks","turnovers","fouls"
+
+# If the column names are abbreviations, what is the full description of each column?
+"player" - first and last names of player
+"games_played" - Games Played during regular season
+"minutes" - Minutes Played during regular season
+"field_goals_made" - field goals made successfully
+"field_goals_atts" - field goals attempt total
+"field_goals_perc" - field goals success percentage
+"points3_made" - 3 point field goals made successfully
+"points3_atts" - 3 point field goals attempted
+"points3_perc" - 3 point field goals success percentage
+"points2_made" - 2 points fieldgoals made successfully
+"points2_atts" - 2 point fieldgoals attempted
+"points2_perc" - 2-Point field goals success percentage
+"points1_made" - free throws successfully made
+"points1_atts" - free throws attempted
+"points1_perc" - percentage of free throws made sucessfully
+"off_rebounds" - offensive rebounds
+"def_rebounds"- defensiverebounds
+"assists"
+"steals"
+"blocks"
+"turnovers"
+"fouls"
+
+
+# What are the units of measurement (e.g. inches, pounds, km/h, etc)?
+"player"          char
+"games_played"    int
+"minutes"         int
+"field_goals_made" int
+"field_goals_atts" int
+"field_goals_perc" percent
+"points3_made" int
+"points3_atts" int
+"points3_perc" percent
+"points2_made" int
+"points2_atts" int
+"points2_perc" percent
+"points1_made" int
+"points1_atts" int
+"points1_perc" percentage
+"off_rebounds" int
+"def_rebounds" int
+"assists" int
+"steals" int
+"blocks" int
+"turnovers" int
+"fouls" int
+
+# How missing values are codified?
+Codified as N/A 
+
+# Data Sourse: www.basketball-reference.com
+# Given  a team:
+• https://www.basketball-reference.com/teams/GSW/2017.html (GSW)
+• https://www.basketball-reference.com/teams/LAL/2017.html (LAL)
+• https://www.basketball-reference.com/teams/SAS/2017.html (SAS)
+• https://www.basketball-reference.com/teams/HOU/2017.html (HOU)
+• https://www.basketball-reference.com/teams/LAC/2017.html (LAC)
+• https://www.basketball-reference.com/teams/UTA/2017.html (UTA)
+• https://www.basketball-reference.com/teams/OKC/2017.html (OKC)
+• https://www.basketball-reference.com/teams/MEM/2017.html (MEM)
+• https://www.basketball-reference.com/teams/POR/2017.html (POR)
+• https://www.basketball-reference.com/teams/DEN/2017.html (DEN)
+• https://www.basketball-reference.com/teams/NOP/2017.html (NOP)
+• https://www.basketball-reference.com/teams/DAL/2017.html (DAL)
+• https://www.basketball-reference.com/teams/SAC/2017.html (SAC)
+• https://www.basketball-reference.com/teams/MIN/2017.html (MIN)
+• https://www.basketball-reference.com/teams/PHO/2017.html (PHO)
+• https://www.basketball-reference.com/teams/BRK/2017.html (BRK)
+• https://www.basketball-reference.com/teams/PHI/2017.html (PHI)
+• https://www.basketball-reference.com/teams/ORL/2017.html (ORL)
+• https://www.basketball-reference.com/teams/NYK/2017.html (NYK)
+• https://www.basketball-reference.com/teams/CHO/2017.html (CHO)
+• https://www.basketball-reference.com/teams/DET/2017.html (DET)
+• https://www.basketball-reference.com/teams/MIA/2017.html (MIA)
+• https://www.basketball-reference.com/teams/IND/2017.html (IND)
+• https://www.basketball-reference.com/teams/CHI/2017.html (CHI)
+• https://www.basketball-reference.com/teams/MIL/2017.html (MIL)
+• https://www.basketball-reference.com/teams/ATL/2017.html (ATL)
+• https://www.basketball-reference.com/teams/WAS/2017.html (WAS)
+• https://www.basketball-reference.com/teams/TOR/2017.html (TOR)
+• https://www.basketball-reference.com/teams/CLE/2017.html (CLE)
+• https://www.basketball-reference.com/teams/BOS/2017.html (BOS)
+

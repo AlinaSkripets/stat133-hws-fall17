@@ -1,0 +1,82 @@
+---
+title: "nba2017-roster"
+author: "Alina Skripets"
+date: "October 10, 2017"
+output: github_document
+---
+# NBA player roster
+
+## What is the data about?
+It is somewhat limited statistics on the NBA players.
+
+## How many rows?
+441
+## How many columns?
+8
+## What are the column labels?
+"player"     
+"team"       
+"position"   
+"height"
+"weight"
+"age" 
+"experience" 
+"salary"    
+    
+   
+# If the column names are abbreviations, what is the full description of each column?
+• Player: first and last names of player
+• Team: 3-letter team abbreviation
+• Position: player’s position
+• Height: height of players in centimeters
+• Weight: weight of players in kg
+• Age: Age of Player at the start of February 1st of that season.
+• Experience: years of experience in NBA (a value of 0 means rookie)
+• Salary: player salary in dollars
+
+# What are the units of measurement (e.g. inches, pounds, km/h, etc)?
+• Player: character
+• Team: character DAL IND LAL etc
+• Position: character C PG SF PF etc
+• Height: centimeters
+• Weight: kilograms
+• Experience: years 
+• Salary: dollars
+• Age: years
+
+# How missing values are codified?
+No missing values (Codified as N/A) 
+
+# Data Sourse: www.basketball-reference.com
+# Given  a team:
+• https://www.basketball-reference.com/teams/GSW/2017.html (GSW)
+• https://www.basketball-reference.com/teams/LAL/2017.html (LAL)
+• https://www.basketball-reference.com/teams/SAS/2017.html (SAS)
+• https://www.basketball-reference.com/teams/HOU/2017.html (HOU)
+• https://www.basketball-reference.com/teams/LAC/2017.html (LAC)
+• https://www.basketball-reference.com/teams/UTA/2017.html (UTA)
+• https://www.basketball-reference.com/teams/OKC/2017.html (OKC)
+• https://www.basketball-reference.com/teams/MEM/2017.html (MEM)
+• https://www.basketball-reference.com/teams/POR/2017.html (POR)
+• https://www.basketball-reference.com/teams/DEN/2017.html (DEN)
+• https://www.basketball-reference.com/teams/NOP/2017.html (NOP)
+• https://www.basketball-reference.com/teams/DAL/2017.html (DAL)
+• https://www.basketball-reference.com/teams/SAC/2017.html (SAC)
+• https://www.basketball-reference.com/teams/MIN/2017.html (MIN)
+• https://www.basketball-reference.com/teams/PHO/2017.html (PHO)
+• https://www.basketball-reference.com/teams/BRK/2017.html (BRK)
+• https://www.basketball-reference.com/teams/PHI/2017.html (PHI)
+• https://www.basketball-reference.com/teams/ORL/2017.html (ORL)
+• https://www.basketball-reference.com/teams/NYK/2017.html (NYK)
+• https://www.basketball-reference.com/teams/CHO/2017.html (CHO)
+• https://www.basketball-reference.com/teams/DET/2017.html (DET)
+• https://www.basketball-reference.com/teams/MIA/2017.html (MIA)
+• https://www.basketball-reference.com/teams/IND/2017.html (IND)
+• https://www.basketball-reference.com/teams/CHI/2017.html (CHI)
+• https://www.basketball-reference.com/teams/MIL/2017.html (MIL)
+• https://www.basketball-reference.com/teams/ATL/2017.html (ATL)
+• https://www.basketball-reference.com/teams/WAS/2017.html (WAS)
+• https://www.basketball-reference.com/teams/TOR/2017.html (TOR)
+• https://www.basketball-reference.com/teams/CLE/2017.html (CLE)
+• https://www.basketball-reference.com/teams/BOS/2017.html (BOS)
+
