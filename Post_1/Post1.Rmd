@@ -5,6 +5,9 @@ date: "October 25, 2017"
 output: html_document
 fontsize: 30pt
 ---
+# Applications of R language - Data Analyst Interview
+
+
 ### Agenda
 1. Introduction
 2. Data cleaning
@@ -18,7 +21,7 @@ fontsize: 30pt
 A year ago, I was looking for a summer internship and stumbleed upon DangFoods.Inc The official position was *Dang Financial Intern*. 
 
 !["Recognize the brand?"](https://www.bcorporation.net/sites/default/files/resize/_MG_9196v2-396x242.JPG)
-/
+
 
 The job implied working a lot with data etry and processing. Sounded like something I could handle and so after reading the job posting I embarked on the journey of applying and interviewing. The first two rounds of the interview went smoothly, all the way up until the moment that my skills and knowledge were put to the test. One morning I recieved the following email: 
 
@@ -217,7 +220,6 @@ q3 %>%
 ```
 
 Dang we are good at this!
-![](Images/dangg.png){width=50%}
 
 And now... On to the next part. 
 > <font size="2"> The customer with the largest percent increase in sales from Feb 16 to Mar 16   </font>
