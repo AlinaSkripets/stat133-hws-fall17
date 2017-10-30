@@ -2,7 +2,7 @@
 title: "Applications of R language - Data Analyst Interview"
 author: "Alina Skripets"
 date: "October 25, 2017"
-output: html_document
+output: github_document
 fontsize: 30pt
 ---
 # Applications of R language - Data Analyst Interview
