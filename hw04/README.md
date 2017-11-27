@@ -11,7 +11,7 @@ Grades Visualizer
 
 library(shiny)
 # Run an app from a subdirectory in the repo
-runGitHub("stat133-hws-fall17", "username", subdir = "hw04/app")
+runGitHub("stat133-hws-fall17", "AlinaSkripets", subdir = "hw04/app/app1")
 
 ------
 #### Comments/Reflections
