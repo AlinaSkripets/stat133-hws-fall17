@@ -1,0 +1,33 @@
+---
+title: "rawscores"
+author: "Alina Skripets"
+date: "November 16, 2017"
+output: github_document
+---
+# Imaginary Stats 133 class grades
+
+## What is the data about?
+It is somewhat limited statistics on the NBA players.
+
+## How many rows?
+334 + 1 title row
+## How many columns?
+16
+## What are the column labels?
+HW1	HW2	HW3	HW4	HW5	HW6	HW7	HW8	HW9	ATT	QZ1	QZ2	QZ3	QZ4	EX1	EX2 
+    
+# If the column names are abbreviations, what is the full description of each column?
+• HW1, HW2,	HW3,	HW4,	HW5,	HW6,	HW7,	HW8,	HW9: grades of homeworks, one of which can be dropped
+• ATT: attendance, number of attended labs
+• QZ1	QZ2	QZ3	QZ4: quiz grades
+• EX1	EX2: grades on the first and second exam
+
+# What are the units of measurement (e.g. inches, pounds, km/h, etc)?
+• HW1, HW2,	HW3,	HW4,	HW5,	HW6,	HW7,	HW8,	HW9: numeric - points, 100 points max, one hw dropped
+• ATT: numeric - number ranges from 0 to 12
+• QZ1	QZ2	QZ3	QZ4: numeric - points out of 12, out of 18, out of 20, out of 20, accordingly
+• EX1	EX2:numeric - points on the exam out of 80 and out of 90 accordingly
+
+
+# How missing values are codified?
+Missing values are blank, in R codified as N/A 
